@@ -35,13 +35,13 @@ jobs:
 
     - name: Install dependencies and build front-end
       run: |
-        cd frontend
+        cd front-end
         npm install
         npm run build
 
     - name: Install dependencies and test back-end
       run: |
-        cd backend
+        cd back-end
         npm install
         npm test
 
