@@ -1,0 +1,48 @@
+name: Build and Test
+
+on:
+  push:
+    branches: [develop]
+  pull_request:
+    branches: [develop]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:8
+        env:
+          MYSQL_DATABASE: atividade_docker
+          MYSQL_USER: root
+          MYSQL_PASSWORD: ''
+          MYSQL_ROOT_PASSWORD: ''
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd "mysqladmin ping --silent"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14'
+
+    - name: Install dependencies and build front-end
+      run: |
+        cd frontend
+        npm install
+        npm run build
+
+    - name: Install dependencies and test back-end
+      run: |
+        cd backend
+        npm install
+        npm test

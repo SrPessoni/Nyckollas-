@@ -1,0 +1,29 @@
+name: Deploy
+
+on:
+  push:
+    branches: [develop]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Log in to Docker Hub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.srpessoni}}
+        password: ${{ secrets.Newminecraft123! }}
+
+    - name: Build and push Docker images
+      run: |
+        docker build -t myuser/frontend:latest ./frontend
+        docker build -t myuser/backend:latest ./backend
+        docker push myuser/frontend:latest
+        docker push myuser/backend:latest
+
+    - name: Deploy to production (simulated)
+      run: echo "Deploying to production..."
